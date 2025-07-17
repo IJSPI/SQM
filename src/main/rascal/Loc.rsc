@@ -13,6 +13,7 @@ import lang::java::m3::AST;
 import vis::Charts;
 import vis::Graphs;
 import Content;
+import String;
 
 public bool aflopend(tuple[&a, num] x, tuple[&a, num] y) {
     return x[1] > y[1];
@@ -33,6 +34,16 @@ public void calculateLOC() {
 
     //Aantal regels per bestand uit tutorial
     map[loc, int] regels = regelsPerBestand(model);
-    for (<a, b> <- sort(toList(regels), aflopend))
+    for (<a, b> <- sort(toList(regels), aflopend)) {
         println("<a.file>: <b> regels");
+    }
+
+    int linesOfCode = 0;
+    //Aantal regels per bestand uit tutorial
+    for (loc files <- files(model)) {
+        for (lines <- readFileLines(files)) {
+            println(trim(lines));
+        }
+    }
+        
 }
