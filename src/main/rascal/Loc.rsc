@@ -27,23 +27,28 @@ public map[loc, int] regelsPerBestand (M3 model) {
 public void calculateLOC() {
     loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
     M3 model = createM3FromDirectory(project);
-    set[loc] bestanden = files(model);
-
-    // aantal Java-bestanden uit tutorial
-    println(size(bestanden));
-
-    //Aantal regels per bestand uit tutorial
-    map[loc, int] regels = regelsPerBestand(model);
-    for (<a, b> <- sort(toList(regels), aflopend)) {
-        println("<a.file>: <b> regels");
-    }
 
     int linesOfCode = 0;
-    //Aantal regels per bestand uit tutorial
+    int linesOfOthers = 0;
+    //LOC
     for (loc files <- files(model)) {
-        for (lines <- readFileLines(files)) {
-            println(trim(lines));
+        for (line <- readFileLines(files)) {
+            linesOfCode += 1;
+
+            if (startsWith(trim(line), "//")) {
+                linesOfOthers += 1;
+            } else if (startsWith(trim(line), "/***")) {
+                linesOfOthers += 1;
+            } else if (startsWith(trim(line), "*")) {
+                linesOfOthers += 1;
+            } else if (isEmpty(trim(line))) {
+                linesOfOthers += 1;
+            } else if (startsWith(trim(line), "}")) {
+                linesOfOthers += 1;
+            }
         }
     }
-        
+    
+    linesOfCode -= linesOfOthers;
+    println("Lines of Code: <linesOfCode>");
 }
