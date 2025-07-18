@@ -15,19 +15,8 @@ import vis::Graphs;
 import Content;
 import String;
 
-public bool aflopend(tuple[&a, num] x, tuple[&a, num] y) {
-    return x[1] > y[1];
-} 
-
-public map[loc, int] regelsPerBestand (M3 model) {
-    set[loc] bestanden = files(model);
-    return ( a:size(readFileLines(a)) | a <- bestanden );
-}
-
-public void calculateLOC() {
-    loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
-    M3 model = createM3FromDirectory(project);
-
+//Calculate lines of code
+public int calculateLOC(M3 model) {
     int linesOfCode = 0;
     int linesOfOthers = 0;
     //LOC
@@ -50,5 +39,5 @@ public void calculateLOC() {
     }
     
     linesOfCode -= linesOfOthers;
-    println("Lines of Code: <linesOfCode>");
+    return linesOfCode;
 }

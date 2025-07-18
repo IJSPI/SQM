@@ -1,4 +1,4 @@
-//Calculation of Metric NOU - Number of Units
+//Calculation of Metric Unit Complexity
 
 module UComplexity
 
@@ -16,8 +16,9 @@ import util::Math;
 import Content;
 import String;
 
+//Calculate cyclomatic complexity per unit by counting predicates and adding 1 (1 is starting value)
 public int calcUnitCC(loc locations) {
-    int count = 0;
+    int count = 1;
 
     visit (locations) {
         case \if(_,_): count=count+1;
@@ -33,6 +34,7 @@ public int calcUnitCC(loc locations) {
     return count;
 }
 
+//Print the complexity results in the rascal terminal.
 public void printComplexityResults(list[int] counts) {
     int total = sum(counts);
     int perUSSimple = percent(counts[0], total);
@@ -41,17 +43,14 @@ public void printComplexityResults(list[int] counts) {
     int perUSVeryHigh = percent(counts[3], total);
 
     println("Unit Complexity:");
-    println("Simple: <perUSSimple>");
-    println("Moderate: <perUSModerate>");
-    println("High: <perUSHigh>");
-    println("Very High: <perUSVeryHigh>");
+    println("  *  Simple: <perUSSimple>%");
+    println("  *  Moderate: <perUSModerate>%");
+    println("  *  High: <perUSHigh>%");
+    println("  *  Very High: <perUSVeryHigh>%");
 }
 
-
-public void calculateUnitSize() {
-    loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
-    M3 model = createM3FromDirectory(project);
-
+//Calculate the complete unit complexity
+public list[int] calculateUnitComplexity(M3 model) {
     list[int] counts = [0, 0, 0, 0];
 
     for(class <- classes(model)) {
@@ -72,7 +71,6 @@ public void calculateUnitSize() {
             counts[3] += 1;
     }
     }
-
      
-    printComplexityResults(counts);
+    return counts;
 }

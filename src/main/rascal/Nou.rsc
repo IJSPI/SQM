@@ -15,14 +15,13 @@ import vis::Graphs;
 import Content;
 import String;
 
+//Compare tuples
 public bool aflopend(tuple[&a, num] x, tuple[&a, num] y) {
    return x[1] > y[1];
 } 
 
-public void calculateNOU() {
-    loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
-    M3 model = createM3FromDirectory(project);
-
+//Calculate the number of units
+public int calculateNOU(M3 model) {
     int numberOfUnits = 0;
     
     // aantal methoden per klasse (gesorteerd)
@@ -35,5 +34,5 @@ public void calculateNOU() {
         numberOfUnits += n;
     }
         
-    println("Number of units: <numberOfUnits>");
+    return numberOfUnits;
 }

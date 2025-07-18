@@ -1,3 +1,5 @@
+//Calculation of metric duplication
+
 module Duplication
 
 import IO;
@@ -15,34 +17,17 @@ import Content;
 import String;
 import Prelude;
 
+//Size of the minimal duplication block to be checked
 int blockSize = 6;
 
-public int calcUnitCC(loc locations) {
-    int count = 0;
-
-    visit (locations) {
-        case \if(_,_): count=count+1;
-        case \if(_,_,_): count=count+1;
-        case \while(_,_): count=count+1;
-        case \for(_,_,_): count=count+1;
-        case \for(_,_,_,_): count=count+1;
-        case \case(_): count=count+1;
-        case \catch(_,_): count=count+1;
-        case \conditional(_,_,_): count=count+1;
-    }
-    
-    return count;
+//Print duplication result in rascal terminal.
+public void printDuplicationResults(int count, int LOC) {
+    int per = percent(count, LOC);
+    println("Duplication: <per>%");
 }
 
-public void printDuplicationResults(int count) {
-    println("Duplication: <count>");
-}
-
-
-public void calculateDuplication() {
-    loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
-    M3 model = createM3FromDirectory(project);
-
+//Calculate amount of lines duplication.
+public int calculateDuplication(M3 model) {
     int count = 0;
     int amountLines = blockSize;
     rel[list[str],loc,int] allBlocks = {};
@@ -93,5 +78,5 @@ public void calculateDuplication() {
         }
     }
 
-    printDuplicationResults(count);
+    return count;
 }

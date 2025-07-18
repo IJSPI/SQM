@@ -16,6 +16,7 @@ import util::Math;
 import Content;
 import String;
 
+//calculate individual unit size
 public int calcSize(loc locations) {
     int linesOfCode = 0;
     int linesOfOthers = 0;
@@ -40,7 +41,8 @@ public int calcSize(loc locations) {
     return linesOfCode;
 }
 
-public void printResults(list[int] counts) {
+//Print unit size results in the rascal terminal
+public void printUsizeResults(list[int] counts) {
     int total = sum(counts);
     int perUSSimple = percent(counts[0], total);
     int perUSModerate = percent(counts[1], total);
@@ -48,17 +50,14 @@ public void printResults(list[int] counts) {
     int perUSVeryHigh = percent(counts[3], total);
 
     println("Unit Size:");
-    println("Simple: <perUSSimple>");
-    println("Moderate: <perUSModerate>");
-    println("High: <perUSHigh>");
-    println("Very High: <perUSVeryHigh>");
+    println("  *  Simple: <perUSSimple>%");
+    println("  *  Moderate: <perUSModerate>%");
+    println("  *  High: <perUSHigh>%");
+    println("  *  Very High: <perUSVeryHigh>%");
 }
 
-
-public void calculateUnitSize() {
-    loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
-    M3 model = createM3FromDirectory(project);
-
+//Calculate the unit classification in unit (method) sizes
+public list[int] calculateUnitSize(M3 model) {
     list[int] counts = [0, 0, 0, 0];
 
     for(class <- classes(model)) {
@@ -79,5 +78,5 @@ public void calculateUnitSize() {
         }
     }
 
-    printResults(counts);
+    return counts;
 }
