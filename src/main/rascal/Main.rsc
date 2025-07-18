@@ -36,27 +36,34 @@ public void main(int testArgument=0) {
 
     println("");
 
-    printVolScore(LOC);
-    printUSizeScore(USize);
-    printUComplexityScore(UComplexity);
-    printDuplicationScore(duplication);
+    int volScore = printVolScore(LOC);
+    int sizScore = printUSizeScore(USize);
+    int comScore = printUComplexityScore(UComplexity);
+    int dupScore = printDuplicationScore(duplication);
+
+    println("");
+
+    printMaintainabilityScores(volScore, sizScore, comScore, dupScore);
 }
 
-public void printVolScore(int LOC) {
+public int printVolScore(int LOC) {
+    str volScore = "";
     if (LOC >= 0 && LOC <= 66000) {
-        println("Volume score: ++");
+        volScore = "++";
     } else if (LOC >= 66001 && LOC <= 246000) {
-        println("Volume score: +");
+        volScore = "+";
     } else if (LOC >= 246001 && LOC <= 665000) {
-        println("Volume score: o");
+        volScore = "o";
     } else if (LOC >= 655001 && LOC <= 1310000) {
-        println("Volume score: -");
+        volScore = "-";
     } else if (LOC >= 1310001) {
-        println("Volume score: --");
+        volScore = "--";
     }
+    println("Volume score: " + volScore);
+    return calcNum(volScore);
 }
 
-public void printUSizeScore(list[int] per) {
+public int printUSizeScore(list[int] per) {
     str sizScore = "";
     if (per[1] <= 25  && per[2] <= 0 && per[3] <= 0) {
         sizScore = "++";
@@ -70,9 +77,10 @@ public void printUSizeScore(list[int] per) {
         sizScore = "--";
     }
     println("Unit Complexity score: " + sizScore);
+    return calcNum(sizScore);
 }
 
-public void printUComplexityScore(list[int] per) {
+public int printUComplexityScore(list[int] per) {
     str comScore = "";
     if (per[1] <= 25  && per[2] <= 0 && per[3] <= 0) {
         comScore = "++";
@@ -86,9 +94,10 @@ public void printUComplexityScore(list[int] per) {
         comScore = "--";
     }
     println("Unit Complexity score: " + comScore);
+    return calcNum(comScore);
 }
 
-public void printDuplicationScore(int dup) {
+public int printDuplicationScore(int dup) {
     str dupScore = "";
     if (dup >= 0 && dup <= 3) {
         dupScore = "++";
@@ -102,4 +111,43 @@ public void printDuplicationScore(int dup) {
         dupScore = "--";
     }
     println("Duplication score: " + dupScore);
+    return calcNum(dupScore);
+}
+
+public void printMaintainabilityScores(int volScore, int sizScore, int comScore, int dupScore) {
+    int analysability = (volScore + dupScore + sizScore) / 3;
+    println("Analysability score: " + calcStr(analysability));
+
+    int changeability = (comScore + dupScore) / 2;
+    println("Changeability score: " + calcStr(changeability));
+
+    int testability = (comScore + sizScore) / 2;
+    println("Testability score: " + calcStr(testability));
+
+    println("");
+
+    int overall = (analysability + changeability + testability) / 3;
+    println("Overall maintainability score: " + calcStr(overall));
+}
+
+//Helper function to return number based on string score
+int calcNum(str score) {
+    visit (score) {
+        case "++": return 5;
+        case "+": return 4;
+        case "o": return 3;
+        case "-": return 2;
+        case "--": return 1;
+    }
+}
+
+//Helper function to return string based on number
+str calcStr(int score) {
+    visit (score) {
+        case 1: return "--";
+        case 2: return "-";
+        case 3: return "o";
+        case 4: return "+";
+        case 5: return "++";
+    }
 }
