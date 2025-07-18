@@ -1,5 +1,3 @@
-//Calculation of Metric Duplication - Percentage of duplication of more than 6 lines
-
 module Duplication
 
 import IO;
@@ -15,6 +13,7 @@ import vis::Graphs;
 import util::Math;
 import Content;
 import String;
+import Prelude;
 
 int blockSize = 6;
 
@@ -35,18 +34,8 @@ public int calcUnitCC(loc locations) {
     return count;
 }
 
-public void printDuplicationResults(list[int] counts) {
-    int total = sum(counts);
-    int perUSSimple = percent(counts[0], total);
-    int perUSModerate = percent(counts[1], total);
-    int perUSHigh = percent(counts[2], total);
-    int perUSVeryHigh = percent(counts[3], total);
-
-    println("Unit Complexity:");
-    println("Simple: <perUSSimple>");
-    println("Moderate: <perUSModerate>");
-    println("High: <perUSHigh>");
-    println("Very High: <perUSVeryHigh>");
+public void printDuplicationResults(int count) {
+    println("Duplication: <count>");
 }
 
 
@@ -54,30 +43,55 @@ public void calculateDuplication() {
     loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
     M3 model = createM3FromDirectory(project);
 
-    list[int] counts = [0, 0, 0, 0];
-
-    allBlocks{};
+    int count = 0;
+    int amountLines = blockSize;
+    rel[list[str],loc,int] allBlocks = {};
 
     for (loc files <- files(model)) {
         list[str] blockLines = [];
-        int i = blockSize; 
-
+        int i = 0;
+        int lineNum = 0; 
+        
+        //Put all possible blocks of 6 lines in a set.
         for (line <- readFileLines(files)) {
             trimmedLine = trim(line);
-            linesOfCode += 1;
+            lineNum += 1;
 
             if (i < blockSize) {
-                blocklines += trimmedLine;
+                blockLines += trimmedLine;
                 i += 1;
             } else if (i >= blockSize) {
-                drop(1, blockLines);
-                blocklines += trimmedLine;
+                blockLines = drop(1, blockLines);
+                blockLines += trimmedLine;
 
-                allBlocks += block;
+                allBlocks += {<blockLines, files, lineNum>};
             } 
         }
     }
-
     
-    printDuplicationResults(counts);
+    //creates list of duplications of blocks of 6. If longer than 6, then multiple blocks are incorporated.
+    lrel[loc,int,list[str]] duplications = [ <y,z,x> | <x,y,z> <- allBlocks, size(allBlocks[x]) > 1];
+    duplications = sort(duplications);
+    
+
+    //Longer duplications than 6 - meaning duplication on next line is present in the list.
+    for (dup <- duplications) {
+        tuple[loc,int,list[str]] nextDuplication = <dup[0],dup[1]+1,dup[2]>;
+
+        bool nextPresent = false;
+        for (dup2 <- duplications) {
+		    if(dup2[0] == nextDuplication[0] && dup2[1] == nextDuplication[1]) {
+			    nextPresent =  true;
+		    }
+	    }
+
+        if (nextPresent) {
+            amountLines += 1;
+        } else {
+			count += amountLines;
+			amountLines = blockSize;
+        }
+    }
+
+    printDuplicationResults(count);
 }
