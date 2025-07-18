@@ -36,17 +36,11 @@ public int calcUnitCC(loc locations) {
 
 //Print the complexity results in the rascal terminal.
 public void printComplexityResults(list[int] counts) {
-    int total = sum(counts);
-    int perUSSimple = percent(counts[0], total);
-    int perUSModerate = percent(counts[1], total);
-    int perUSHigh = percent(counts[2], total);
-    int perUSVeryHigh = percent(counts[3], total);
-
     println("Unit Complexity:");
-    println("  *  Simple: <perUSSimple>%");
-    println("  *  Moderate: <perUSModerate>%");
-    println("  *  High: <perUSHigh>%");
-    println("  *  Very High: <perUSVeryHigh>%");
+    println("  *  Simple: <counts[0]>%");
+    println("  *  Moderate: <counts[1]>%");
+    println("  *  High: <counts[2]>%");
+    println("  *  Very High: <counts[3]>%");
 }
 
 //Calculate the complete unit complexity
@@ -71,6 +65,12 @@ public list[int] calculateUnitComplexity(M3 model) {
             counts[3] += 1;
     }
     }
+
+    int total = sum(counts);
+    counts[0] = percent(counts[0], total);
+    counts[1] = percent(counts[1], total);
+    counts[2] = percent(counts[2], total);
+    counts[3] = percent(counts[3], total);
      
     return counts;
 }

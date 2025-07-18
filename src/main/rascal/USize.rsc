@@ -43,17 +43,11 @@ public int calcSize(loc locations) {
 
 //Print unit size results in the rascal terminal
 public void printUsizeResults(list[int] counts) {
-    int total = sum(counts);
-    int perUSSimple = percent(counts[0], total);
-    int perUSModerate = percent(counts[1], total);
-    int perUSHigh = percent(counts[2], total);
-    int perUSVeryHigh = percent(counts[3], total);
-
     println("Unit Size:");
-    println("  *  Simple: <perUSSimple>%");
-    println("  *  Moderate: <perUSModerate>%");
-    println("  *  High: <perUSHigh>%");
-    println("  *  Very High: <perUSVeryHigh>%");
+    println("  *  Simple: <counts[0]>%");
+    println("  *  Moderate: <counts[1]>%");
+    println("  *  High: <counts[2]>%");
+    println("  *  Very High: <counts[3]>%");
 }
 
 //Calculate the unit classification in unit (method) sizes
@@ -77,6 +71,12 @@ public list[int] calculateUnitSize(M3 model) {
             } 
         }
     }
+
+    int total = sum(counts);
+    counts[0] = percent(counts[0], total);
+    counts[1] = percent(counts[1], total);
+    counts[2] = percent(counts[2], total);
+    counts[3] = percent(counts[3], total);
 
     return counts;
 }
