@@ -11,10 +11,10 @@ import lang::java::m3::Core;
 import lang::java::m3::AST;
 
 public void main(int testArgument=0) {
-    loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL/|;
+    loc project = |file:///Users/20214192/Downloads/1SQMHsqlDB/|;
     M3 model = createM3FromDirectory(project);
 
-    str pName = "Example";
+    str pName = "Small SQL";
 
     println(pName);
     println("----");
@@ -126,7 +126,7 @@ public void printMaintainabilityScores(int volScore, int sizScore, int comScore,
 
     println("");
 
-    int overall = (analysability + changeability + testability) / 3;
+    int overall = (volScore + dupScore + sizScore + comScore) / 4;
     println("Overall maintainability score: " + calcStr(overall));
 }
 
