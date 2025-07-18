@@ -42,10 +42,14 @@ public int calculateDuplication(M3 model) {
             trimmedLine = trim(line);
             lineNum += 1;
 
-            if (i < blockSize) {
+            //Check wether the line is relevant (eg not empty or only containing accolade)
+            bool relevance = checkRelevance(trimmedLine);
+
+            //Only if line is relevant:
+            if (i < blockSize && relevance) {
                 blockLines += trimmedLine;
                 i += 1;
-            } else if (i >= blockSize) {
+            } else if (i >= blockSize && relevance) {
                 blockLines = drop(1, blockLines);
                 blockLines += trimmedLine;
 
@@ -79,4 +83,25 @@ public int calculateDuplication(M3 model) {
     }
 
     return count;
+}
+
+//Checks whether a given line is relevant
+public bool checkRelevance(str line) {
+    if (startsWith(line, "//")) {
+        return false;
+    } else if (startsWith(line, "/***")) {
+        return false;
+    } else if (startsWith(line, "*")) {
+        return false;
+    } else if (isEmpty(line)) {
+        return false;
+    } else if (startsWith(line, "}")) {
+        return false;
+    } else if (startsWith(line, "import")) {
+        return false;
+    } else if (startsWith(line, "package")) {
+        return false;
+    } else {
+        return true;
+    }
 }

@@ -11,7 +11,7 @@ import lang::java::m3::Core;
 import lang::java::m3::AST;
 
 public void main(int testArgument=0) {
-    loc project = |file:///Users/20214192/Downloads/1SQMTestDocs/|;
+    loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL/|;
     M3 model = createM3FromDirectory(project);
 
     str pName = "Example";
