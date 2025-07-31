@@ -7,11 +7,19 @@ import UComplexity;
 import USize;
 
 import IO;
+import analysis::graphs::Graph;
 import lang::java::m3::Core;
 import lang::java::m3::AST;
+import vis::Charts;
+import vis::Graphs;
+import Content;
+import Map;
+import List;
+import Set;
+import Relation;
 
 public void main(int testArgument=0) {
-    loc project = |file:///Users/20214192/Downloads/1SQMHsqlDB/|;
+    loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL/|;
     M3 model = createM3FromDirectory(project);
 
     str pName = "Small SQL";
@@ -44,6 +52,8 @@ public void main(int testArgument=0) {
     println("");
 
     printMaintainabilityScores(volScore, sizScore, comScore, dupScore);
+
+    VisRegelsPerBestand(model);
 }
 
 public int printVolScore(int LOC) {
@@ -150,4 +160,20 @@ str calcStr(int score) {
         case 4: return "+";
         case 5: return "++";
     }
+}
+
+public map[loc, int] regelsPerBestand (M3 model) {
+    set[loc] bestanden = files(model);
+    return ( a:size(readFileLines(a)) | a <- bestanden );
+}
+
+public Content Vis() {
+    loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL/|;
+    M3 model = createM3FromDirectory(project);
+    rel[str, num] regels = { <l.file, a> | <l,a> <- toRel(regelsPerBestand(model)) };
+    return barChart(sort(regels, aflopend), title="Regels per Javabestand");
+}
+
+public Content VisComponenten() {
+    return graph(gebruikt,title="Componenten", \layout=defaultGridLayout(rows=2,cols=3));
 }
