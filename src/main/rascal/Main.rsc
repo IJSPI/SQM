@@ -9,7 +9,6 @@ import USize;
 import IO;
 import analysis::graphs::Graph;
 import lang::java::m3::Core;
-import lang::java::m3::AST;
 import vis::Charts;
 import vis::Graphs;
 import Content;

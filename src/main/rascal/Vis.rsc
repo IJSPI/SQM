@@ -41,8 +41,7 @@ public rel[str, num] calculateCCDensity(M3 model) {
         for(m <- methoden){
             int size = calcSize(m);
             int unitCC = calcUnitCC(m);
-            println(m);
-            println("CC: <unitCC> en LOC: <size>");
+            println("Size: <size> CC: <unitCC>");
         }
     }
 
