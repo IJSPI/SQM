@@ -30,7 +30,7 @@ public int calcUnitCC(loc locations) {
         case \catch(_,_): count=count+1;
         case \conditional(_,_,_): count=count+1;
     }
-    
+
     return count;
 }
 
