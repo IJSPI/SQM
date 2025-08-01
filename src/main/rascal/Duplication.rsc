@@ -87,11 +87,14 @@ public int calculateDuplication(M3 model) {
 
 //Checks whether a given line is relevant
 public bool checkRelevance(str line) {
+    line = trim(line);
     if (startsWith(line, "//")) {
         return false;
-    } else if (startsWith(line, "/***")) {
+    } else if (startsWith(line, "/**")) {
         return false;
     } else if (startsWith(line, "*")) {
+        return false;
+    } else if (startsWith(line, "@")) {
         return false;
     } else if (isEmpty(line)) {
         return false;
