@@ -24,7 +24,7 @@ import lang::csv::IO;
 
 //Export the results to CSV file in relevant form
 public void exportToCSV() {
-    loc project = |file:///Users/20214192/Downloads/1SQMTest|;
+    loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL|;
     M3 model = createM3FromDirectory(project);
 
     rel[str, str, num, num, num] relData = calculateCCDensity(model);
