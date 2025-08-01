@@ -24,12 +24,12 @@ import lang::csv::IO;
 
 //Export the results to CSV file in relevant form
 public void exportToCSV() {
-    loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL/|;
+    loc project = |file:///Users/20214192/Downloads/1SQMTest|;
     M3 model = createM3FromDirectory(project);
 
     rel[str, str, num, num, num] relData = calculateCCDensity(model);
     
-    writeCSV(#rel[str, str, num, num, num], relData, |file:///Users/20214192/sqm/res.csv|, header = false, separator = ";");
+    writeCSV(#rel[str, str, num, num, num], relData, |file:///Users/20214192/sqm/res.csv|, header = false, separator = ",");
 }
 
 //Calculate list of CC density's and put in list with name of method.
