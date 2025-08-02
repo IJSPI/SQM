@@ -13,7 +13,6 @@ import lang::java::m3::AST;
 import lang::html::IO;
 import lang::html::AST;
 import Content;
-import Charts;
 import Map;
 import List;
 import Set;
