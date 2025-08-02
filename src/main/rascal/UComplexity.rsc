@@ -20,15 +20,27 @@ import String;
 public int calcUnitCC(loc locations) {
     int count = 1;
 
-    visit (locations) {
-        case \if(_,_): count=count+1;
-        case \if(_,_,_): count=count+1;
-        case \while(_,_): count=count+1;
-        case \for(_,_,_): count=count+1;
-        case \for(_,_,_,_): count=count+1;
-        case \case(_): count=count+1;
-        case \catch(_,_): count=count+1;
-        case \conditional(_,_,_): count=count+1;
+    for (l <- readFileLines(locations)) {
+        l = trim(uncapitalize(l));
+        if (startsWith(l, "if")) {
+            count=count+1;
+        } if (startsWith(l, "while")) {
+            count=count+1;
+        } if (startsWith(l, "for")) {
+            count=count+1;
+        } if (startsWith(l, "case")) {
+            count=count+1;
+        } if (startsWith(l, "catch")) {
+            count=count+1;
+        } if (startsWith(l, "foreach")) {
+            count=count+1;
+        } if (contains(l, "||")) {
+            count=count+1;
+        } if (contains(l, "&&")) {
+            count=count+1;
+        } if (contains(l, "?")) {
+            count=count+1;
+        }
     }
     
     return count;
@@ -50,6 +62,7 @@ public list[int] calculateUnitComplexity(M3 model) {
     for(class <- classes(model)) {
         int cc = 0;
         methoden = { y | y <- model.containment[class], y.scheme=="java+method" || y.scheme=="java+constructor"};
+
 
         for(m <- methoden){
             cc += calcUnitCC(m);   

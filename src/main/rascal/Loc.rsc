@@ -15,29 +15,38 @@ import vis::Graphs;
 import Content;
 import String;
 
+//Calculate LOC per file
+public int calculateFileLOC(loc file) {
+    int linesOfCode = 0;
+    int linesOfOthers = 0;
+
+    for (line <- readFileLines(file)) {
+        linesOfCode += 1;
+
+        if (startsWith(trim(line), "//")) {
+            linesOfOthers += 1;
+        } else if (startsWith(trim(line), "/***")) {
+            linesOfOthers += 1;
+        } else if (startsWith(trim(line), "*")) {
+            linesOfOthers += 1;
+        } else if (isEmpty(trim(line))) {
+            linesOfOthers += 1;
+        } else if (startsWith(trim(line), "}")) {
+            linesOfOthers += 1;
+        }
+    }
+
+    linesOfCode -= linesOfOthers;
+    return linesOfCode;
+}
+
 //Calculate lines of code
 public int calculateLOC(M3 model) {
     int linesOfCode = 0;
-    int linesOfOthers = 0;
     //LOC
-    for (loc files <- files(model)) {
-        for (line <- readFileLines(files)) {
-            linesOfCode += 1;
-
-            if (startsWith(trim(line), "//")) {
-                linesOfOthers += 1;
-            } else if (startsWith(trim(line), "/***")) {
-                linesOfOthers += 1;
-            } else if (startsWith(trim(line), "*")) {
-                linesOfOthers += 1;
-            } else if (isEmpty(trim(line))) {
-                linesOfOthers += 1;
-            } else if (startsWith(trim(line), "}")) {
-                linesOfOthers += 1;
-            }
-        }
+    for (loc file <- files(model)) {
+        linesOfCode += calculateFileLOC(file);
     }
     
-    linesOfCode -= linesOfOthers;
     return linesOfCode;
 }
