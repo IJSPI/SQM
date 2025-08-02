@@ -34,7 +34,7 @@ public void exportToCSV() {
     writeCSV(#rel[str, str, num, num, num], relData, |file:///Users/20214192/sqm/res.csv|, header = false, separator = ",");
 }
 
-//Calculate list of CC density's and put in list with name of method.
+//Calculate list of CC density, size and CC and put in list with name of method and of the parent.
 public rel[str, str, num, num, num] calculateCCDensity(M3 model) {
     rel[str, str, num, num, num] functionsRel = {};
     rel[str, str, num, num, num] classesRel = {};
@@ -74,14 +74,16 @@ public rel[str, str, num, num, num] calculateCCDensity(M3 model) {
 public rel[str, str, num, num, num] computeClassRelation(rel[str, str, num, num, num] functionsRel, rel[str, str, num, num, num] classesRel) {
     rel[str, str, num, num, num] newRel = functionsRel;
     list[str] classesHad = [];
+
     for (curClassRel <- classesRel) {
+
         str name = curClassRel[0];
         int folderCC = 0;
         int folderSize = 0;
         str parent = curClassRel[1];
         bool check = parent in classesHad;
+
         if (!check) {
-            //println(check);
             sameParentRel = { <a,b,c,d,e> | <a,b,c,d,e> <- classesRel, b == curClassRel[1]};
 
             for (classRel <- sameParentRel) {
@@ -92,8 +94,6 @@ public rel[str, str, num, num, num] computeClassRelation(rel[str, str, num, num,
             
             real folderCCDensity = round(toReal(folderCC) / toReal(max(folderSize,1)), 0.001);
             classesHad = classesHad + parent;
-            //println("Name : <curClassRel[0]> and <curClassRel[1]>");
-
 
             newRel += <curClassRel[1], "", folderCCDensity, folderCC, folderSize>;
         }
@@ -102,7 +102,7 @@ public rel[str, str, num, num, num] computeClassRelation(rel[str, str, num, num,
     return newRel;
 }
 
-//Return method name
+//Extraxt the method name from the given location.\
 public str extractMethodName(loc method) {
     bool gotName = false;
     str methodName = "";
