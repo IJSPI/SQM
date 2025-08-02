@@ -22,6 +22,8 @@ import String;
 import util::Math;
 import lang::csv::IO;
 
+bool reducedSet = true;
+
 //Export the results to CSV file in relevant form
 public void exportToCSV() {
     loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL|;
@@ -50,7 +52,9 @@ public rel[str, str, num, num, num] calculateCCDensity(M3 model) {
             classCC += unitCC;
             real CCDensity = round(toReal(unitCC) / toReal(max(size,1)), 0.001);
             str name = extractMethodName(m);
-            functionsRel += <name, className, CCDensity, unitCC, size>;
+            if (!reducedSet) {
+                functionsRel += <name, className, CCDensity, unitCC, size>;
+            }
         }
 
         loc classParent = class.parent;
@@ -69,21 +73,30 @@ public rel[str, str, num, num, num] calculateCCDensity(M3 model) {
 //Compute relation with all nodes for visualization
 public rel[str, str, num, num, num] computeClassRelation(rel[str, str, num, num, num] functionsRel, rel[str, str, num, num, num] classesRel) {
     rel[str, str, num, num, num] newRel = functionsRel;
+    list[str] classesHad = [];
     for (curClassRel <- classesRel) {
         str name = curClassRel[0];
         int folderCC = 0;
         int folderSize = 0;
+        str parent = curClassRel[1];
+        bool check = parent in classesHad;
+        if (!check) {
+            //println(check);
+            sameParentRel = { <a,b,c,d,e> | <a,b,c,d,e> <- classesRel, b == curClassRel[1]};
 
-        sameParentRel = { <a,b,c,d,e> | <a,b,c,d,e> <- classesRel, b == curClassRel[1]};
+            for (classRel <- sameParentRel) {
+                folderCC += classRel[3];
+                folderSize += classRel[4];
+                classesRel -= curClassRel;
+            }
+            
+            real folderCCDensity = round(toReal(folderCC) / toReal(max(folderSize,1)), 0.001);
+            classesHad = classesHad + parent;
+            //println("Name : <curClassRel[0]> and <curClassRel[1]>");
 
-        for (classRel <- sameParentRel) {
-            folderCC += classRel[3];
-            folderSize += classRel[4];
-            classesRel -= curClassRel;
+
+            newRel += <curClassRel[1], "", folderCCDensity, folderCC, folderSize>;
         }
-        
-        real folderCCDensity = round(toReal(folderCC) / toReal(max(folderSize,1)), 0.001);
-        newRel += <curClassRel[1], "", folderCCDensity, folderCC, folderSize>;
     }
 
     return newRel;
