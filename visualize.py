@@ -1,5 +1,6 @@
+#Using Plotly to generate the circles
 import dash
-from dash import html, dcc, Input, Output, State
+from dash import html, dcc, Input, Output
 import plotly.express as px
 import pandas as pd
 
@@ -26,11 +27,11 @@ app.layout = html.Div([
 
     dcc.Graph(id="bubblechart-plot"),
 
-    html.Button("General Overview", id='general-button', n_clicks=0, style={"marginTop": "20px"}),
-    html.Button("Database View", id='database-button', n_clicks=0, style={"marginTop": "20px"}),
-    html.Button("JUnit View", id='junit-button', n_clicks=0, style={"marginTop": "20px"}),
-    html.Button("Tools View", id='tools-button', n_clicks=0, style={"marginTop": "20px"}),
-    html.Button("Language View", id='language-button', n_clicks=0, style={"marginTop": "20px"}),
+    html.Button("General Overview", id='general-button', n_clicks=0, style={"marginTop": "20px", "marginRight": "20px", "marginLeft": "500px"}),
+    html.Button("Database View", id='database-button', n_clicks=0, style={"marginTop": "20px", "marginRight": "20px"}),
+    html.Button("JUnit View", id='junit-button', n_clicks=0, style={"marginTop": "20px", "marginRight": "20px"}),
+    html.Button("Tools View", id='tools-button', n_clicks=0, style={"marginTop": "20px", "marginRight": "20px"}),
+    html.Button("Language View", id='language-button', n_clicks=0, style={"marginTop": "20px", "marginRight": "20px"}),
 
     html.Div(id="output-info", style={"marginTop": "10px", "fontStyle": "italic"})
 ])

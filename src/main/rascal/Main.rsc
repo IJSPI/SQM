@@ -7,6 +7,7 @@ import UComplexity;
 import USize;
 
 import IO;
+import util::Math;
 import analysis::graphs::Graph;
 import lang::java::m3::Core;
 import vis::Charts;
@@ -17,11 +18,12 @@ import List;
 import Set;
 import Relation;
 
+//Run the main program. Calculate and print all metrics
 public void main(int testArgument=0) {
     loc project = |file:///Users/20214192/Downloads/1SQMSmallSQL/|;
     M3 model = createM3FromDirectory(project);
 
-    str pName = "Small SQL";
+    str pName = "SmallSQL";
 
     println(pName);
     println("----");
@@ -46,13 +48,14 @@ public void main(int testArgument=0) {
     int volScore = printVolScore(LOC);
     int sizScore = printUSizeScore(USize);
     int comScore = printUComplexityScore(UComplexity);
-    int dupScore = printDuplicationScore(duplication);
+    int dupScore = printDuplicationScore(duplication, LOC);
 
     println("");
 
     printMaintainabilityScores(volScore, sizScore, comScore, dupScore);
 }
 
+//Print the volume score
 public int printVolScore(int LOC) {
     str volScore = "";
     if (LOC >= 0 && LOC <= 66000) {
@@ -70,6 +73,7 @@ public int printVolScore(int LOC) {
     return calcNum(volScore);
 }
 
+//Print the unit size score
 public int printUSizeScore(list[int] per) {
     str sizScore = "";
     if (per[1] <= 25  && per[2] <= 0 && per[3] <= 0) {
@@ -83,10 +87,11 @@ public int printUSizeScore(list[int] per) {
     } else {
         sizScore = "--";
     }
-    println("Unit Complexity score: " + sizScore);
+    println("Unit Size score: " + sizScore);
     return calcNum(sizScore);
 }
 
+//Print the score for complexity
 public int printUComplexityScore(list[int] per) {
     str comScore = "";
     if (per[1] <= 25  && per[2] <= 0 && per[3] <= 0) {
@@ -104,7 +109,9 @@ public int printUComplexityScore(list[int] per) {
     return calcNum(comScore);
 }
 
-public int printDuplicationScore(int dup) {
+//Print duplication score
+public int printDuplicationScore(int dupl, int LOC) {
+    int dup = percent(dupl, LOC);
     str dupScore = "";
     if (dup >= 0 && dup <= 3) {
         dupScore = "++";
@@ -121,6 +128,7 @@ public int printDuplicationScore(int dup) {
     return calcNum(dupScore);
 }
 
+//Print general maintainability scores based on subscores
 public void printMaintainabilityScores(int volScore, int sizScore, int comScore, int dupScore) {
     int analysability = (volScore + dupScore + sizScore) / 3;
     println("Analysability score: " + calcStr(analysability));

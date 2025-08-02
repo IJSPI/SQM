@@ -90,7 +90,7 @@ public bool checkRelevance(str line) {
     line = trim(line);
     if (startsWith(line, "//")) {
         return false;
-    } else if (startsWith(line, "/**")) {
+    } else if (startsWith(line, "/***")) {
         return false;
     } else if (startsWith(line, "*")) {
         return false;
